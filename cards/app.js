@@ -18,18 +18,7 @@ axios.get('https://deckofcardsapi.com/api/deck/new/shuffle/')
 .then(resp => {
     return deck_id = resp.data.deck_id
 })
-.then(deck_id => button.addEventListener('click',axios.get(`https://deckofcardsapi.com/api/deck/${deck_id}/draw/`)
-.then(card => {
-    console.log(card)
-    img.src = card.data.cards[0].image
-    if(card.data.remaining >0){
-    cards.append(img)
-    }else{
-        cards.append('No more cards!!')
-    }
-    
-})))
-
+.then(deck_id => button.addEventListener('click',nextCard))
 // async function newDeck(){
 //     const resp = await axios.get('https://deckofcardsapi.com/api/deck/new/shuffle/')
 //     deck_id = resp.data.deck_id
@@ -55,3 +44,20 @@ axios.get('https://deckofcardsapi.com/api/deck/new/shuffle/')
 // }
 // nextCard()
 // button.addEventListener('click', nextCard)
+
+function nextCard(){
+    return new Promise((resolve, reject) => {
+        axios.get(`https://deckofcardsapi.com/api/deck/${deck_id}/draw/`)
+        .then(card => {
+            console.log(card)
+            img.src = card.data.cards[0].image
+            if(card.data.remaining >0){
+            cards.append(img)
+            }else{
+                cards.append('No more cards!!')
+            }
+            resolve()
+        
+    })
+})
+}
